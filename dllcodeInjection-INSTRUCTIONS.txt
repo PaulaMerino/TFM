@@ -1,10 +1,10 @@
 
 PARA COMPILAR DLL (-shared ES IMPRESCINDIBLE PARA INDICAR AL COMPILADOR QUE SE TRATA DE UNA DLL, SINO NO FUNCIONA)
 
-x86_64-w64-mingw32-gcc -shared -o dllExampleInjection.dll dllExampleInjection.c
+x86_64-w64-mingw32-gcc -shared -o ./exec/dllExampleInjection.dll dllExampleInjection.c
 
 
-x86_64-w64-mingw32-gcc -o dllcodeInjection.exe dllcodeInjection-noPrints.c
+x86_64-w64-mingw32-gcc -o ./exec/dllcodeInjection.exe dllcodeInjection-noPrints.c
 
 
 PARA QUE FUNCIONE HAYQ EU DESCARGAR AMBOS ARCHIVOS

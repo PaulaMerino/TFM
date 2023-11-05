@@ -32,7 +32,7 @@ unsigned char buf[] =
 
 
 
-pau@pau-PC:~/Escritorio/Master/TFM/ScriptsComandos$ x86_64-w64-mingw32-gcc -o shellcodeInjection.exe shellcodeInjection.c 
+pau@pau-PC:~/Escritorio/Master/TFM/ScriptsComandos$ x86_64-w64-mingw32-gcc -o ./exec/shellcodeInjection.exe shellcodeInjection.c 
 shellcodeInjection.c: In function ‘main’:
 shellcodeInjection.c:14:19: warning: initialization of ‘DWORD’ {aka ‘long unsigned int’} from ‘void *’ makes integer from pointer without a cast [-Wint-conversion]
    14 |     DWORD dwPID = NULL, dwTID = NULL;

