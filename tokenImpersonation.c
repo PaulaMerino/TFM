@@ -11,6 +11,7 @@ int main(int argc, char * argv[]) {
 
     wchar_t cmdline[] = L"C:\\Windows\\System32\\calc.exe"; 
 
+    // Initialize the STARTUPINFOW and PROCESS_INFORMATION structures
     ZeroMemory(&si, sizeof(STARTUPINFOW)); 
     ZeroMemory(&pi, sizeof(PROCESS_INFORMATION)); 
     si.cb = sizeof(STARTUPINFOW); 
