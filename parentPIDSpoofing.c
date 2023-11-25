@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-int main(int argc, char * argv[]) {
+int main(int argc, char* argv[]) {
     STARTUPINFOEX si;
     PROCESS_INFORMATION pi;
     SIZE_T attributeSize;
@@ -14,6 +14,7 @@ int main(int argc, char * argv[]) {
         return EXIT_FAILURE;
     }
     pid = atoi(argv[1]);
+    
 
     ZeroMemory(&si, sizeof(STARTUPINFOEX));
     si.StartupInfo.cb = sizeof(STARTUPINFOEX);
@@ -21,7 +22,7 @@ int main(int argc, char * argv[]) {
     // Open the parent process with all possible access rights
     HANDLE parentProcessHandle = OpenProcess(MAXIMUM_ALLOWED, false, pid);
     if (parentProcessHandle == NULL) {
-        if (debug) {printf("OpenProcess failed with error %d\n", GetLastError());}
+        if (debug) { printf("OpenProcess failed with error %d\n", GetLastError()); }
         return EXIT_FAILURE;
     }
 
@@ -30,32 +31,34 @@ int main(int argc, char * argv[]) {
     InitializeProcThreadAttributeList(NULL, 1, 0, &attributeSize);
     si.lpAttributeList = (LPPROC_THREAD_ATTRIBUTE_LIST)HeapAlloc(GetProcessHeap(), 0, attributeSize);
     if (si.lpAttributeList == NULL) {
-        if (debug) {printf("HeapAlloc failed with error %d\n", GetLastError());}
+        if (debug) { printf("HeapAlloc failed with error %d\n", GetLastError()); }
         return EXIT_FAILURE;
     }
-        // This second call to the function is to initialize the buffer with the attribute list.
+
+    // This second call to the function is to initialize the buffer with the attribute list.
     InitializeProcThreadAttributeList(si.lpAttributeList, 1, 0, &attributeSize);
     if (si.lpAttributeList == NULL) {
-        if (debug) {printf("InitializeProcThreadAttributeList failed with error %d\n", GetLastError());}
+        if (debug) { printf("InitializeProcThreadAttributeList failed with error %d\n", GetLastError()); }
         return EXIT_FAILURE;
     }
 
     // Set the PROC_THREAD_ATTRIBUTE_PARENT_PROCESS attribute to the identifier of the parent process
     UpdateProcThreadAttribute(si.lpAttributeList, 0, PROC_THREAD_ATTRIBUTE_PARENT_PROCESS, &parentProcessHandle, sizeof(HANDLE), NULL, NULL);
     if (si.lpAttributeList == NULL) {
-        if (debug) {printf("UpdateProcThreadAttribute failed with error %d\n", GetLastError());}
+        if (debug) { printf("UpdateProcThreadAttribute failed with error %d\n", GetLastError()); }
         return EXIT_FAILURE;
     }
 
     // Create the new process
-    CreateProcessW(NULL, L"C:\\Windows\\System32\\calc.exe", NULL, NULL, FALSE, EXTENDED_STARTUPINFO_PRESENT, NULL, NULL, &(si.StartupInfo), &pi);
+    CreateProcessA(NULL, (LPSTR)"calc.exe", NULL, NULL, FALSE, EXTENDED_STARTUPINFO_PRESENT, NULL, NULL, &si.StartupInfo, &pi);
     if (pi.hProcess == NULL) {
-        if (debug) {printf("CreateProcessW failed with error %d\n", GetLastError());}
+        if (debug) { printf("CreateProcessW failed with error %d\n", GetLastError()); }
         return EXIT_FAILURE;
     }
 
     return EXIT_SUCCESS;
 }
+
 
 /*
 

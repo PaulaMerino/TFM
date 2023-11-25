@@ -25,26 +25,31 @@ int main(int argc, char * argv[]) {
 
     // Get a handle to the target process for which we are trying to obtain an access token
     hProcess = OpenProcess(PROCESS_ALL_ACCESS, TRUE, pid);
-    if (debug && hProcess == NULL) {
-        printf("OpenProcess failed with error %d\n", GetLastError());
+    if (hProcess == NULL) {
+        if (debug) {printf("OpenProcess failed with error %d\n", GetLastError());}
+        return EXIT_FAILURE;
     }
 
     // Get a handle to the access token for the process
     OpenProcessToken(hProcess, TOKEN_ALL_ACCESS, &hToken);
-    if (debug && hToken == NULL) {
-        printf("OpenProcessToken failed with error %d\n", GetLastError());
+    if (hToken == NULL) {
+        if (debug) {printf("OpenProcessToken failed with error %d\n", GetLastError());}
+        return EXIT_FAILURE;
     }
 
     // Create a new access token that duplicates an existing token
     DuplicateTokenEx(hToken, TOKEN_ALL_ACCESS, NULL, SecurityImpersonation, TokenPrimary, &hDuplicateToken);
-    if (debug && hDuplicateToken == NULL) {
-        printf("DuplicateTokenEx failed with error %d\n", GetLastError());
+    if (hDuplicateToken == NULL) {
+        if (debug) {printf("DuplicateTokenEx failed with error %d\n", GetLastError());}
+        return EXIT_FAILURE;
     }
 
     // Create a new process and its primary thread with a specified token
     CreateProcessAsUserW(hDuplicateToken, NULL, cmdline, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi);
-    if (debug && pi.hProcess == NULL) {
-        printf("CreateProcessAsUserW failed with error %d\n", GetLastError());
+
+    if (pi.hProcess == NULL) {
+        if (debug) {printf("CreateProcessAsUserW failed with error %d\n", GetLastError());}
+        return EXIT_FAILURE;
     }
 
     return EXIT_SUCCESS;
