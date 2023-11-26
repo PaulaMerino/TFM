@@ -10,8 +10,6 @@ set path=C:\Temp;%path%
 copy C:\Windows\System32\calc.exe C:\Temp\net.exe
 
 net.exe
-
----------- CLEAN UP ----------
 set PATH=%OriginalPath%
 rmdir /s /q C:\Temp
 
