@@ -1,0 +1,9 @@
+Scheduled Task/Job: Scheduled Task  T1053.005
+
+
+
+schtasks /create /tn "TFM-CMD" /tr "cmd" /sc once /st 22:59
+
+
+CLEAN UP
+schtasks /delete /tn "TFM-CMD" /f

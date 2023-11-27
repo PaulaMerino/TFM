@@ -1,5 +1,5 @@
 
-Boot or Logon Autostart Execution: Shortcut Modification
+Boot or Logon Autostart Execution: Shortcut Modification (T1547.009)
 
 
 $shell = New-Object -ComObject WScript.Shell
@@ -11,3 +11,5 @@ $shortcut.Save()
 
 Start-Process -FilePath "$env:USERPROFILE\Desktop\Calculator.lnk"
 
+------------- CLEAN UP ---------------
+Remove-Item $env:USERPROFILE\Desktop\Calculator.lnk

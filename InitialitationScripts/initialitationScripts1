@@ -6,6 +6,7 @@ REG.exe ADD HKCU\Environment /v UserInitMprLogonScript /t REG_SZ /d "%USERPROFIL
 
 
 CLEAN UP
+del "%USERPROFILE%\Desktop\script.bat"
 REG.exe DELETE HKCU\Environment /v UserInitMprLogonScript /f >nul 2>&1
 
 
