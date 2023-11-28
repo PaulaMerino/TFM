@@ -7,6 +7,9 @@ int main(int argc, char* argv[]) {
     PROCESS_INFORMATION pi;
     SIZE_T attributeSize;
     DWORD pid; // PID of the parent process
+
+    wchar_t cmdline[] = L"C:\\Windows\\System32\\calc.exe";
+
     int debug = 1;
 
     // Check the number of parameters
@@ -50,7 +53,7 @@ int main(int argc, char* argv[]) {
     }
 
     // Create the new process
-    CreateProcessA(NULL, (LPSTR)"calc.exe", NULL, NULL, FALSE, EXTENDED_STARTUPINFO_PRESENT, NULL, NULL, &si.StartupInfo, &pi);
+    CreateProcessA(NULL, cmdline, NULL, NULL, FALSE, EXTENDED_STARTUPINFO_PRESENT, NULL, NULL, &si.StartupInfo, &pi);
     if (pi.hProcess == NULL) {
         if (debug) { printf("CreateProcessW failed with error %d\n", GetLastError()); }
         return EXIT_FAILURE;

