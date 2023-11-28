@@ -7,9 +7,6 @@ int main(int argc, char* argv[]) {
     PROCESS_INFORMATION pi;
     SIZE_T attributeSize;
     DWORD pid; // PID of the parent process
-
-    wchar_t cmdline[] = L"C:\\Windows\\System32\\calc.exe";
-
     int debug = 1;
 
     // Check the number of parameters
@@ -17,7 +14,6 @@ int main(int argc, char* argv[]) {
         return EXIT_FAILURE;
     }
     pid = atoi(argv[1]);
-    
 
     ZeroMemory(&si, sizeof(STARTUPINFOEX));
     si.StartupInfo.cb = sizeof(STARTUPINFOEX);
@@ -53,7 +49,7 @@ int main(int argc, char* argv[]) {
     }
 
     // Create the new process
-    CreateProcessA(NULL, cmdline, NULL, NULL, FALSE, EXTENDED_STARTUPINFO_PRESENT, NULL, NULL, &si.StartupInfo, &pi);
+    CreateProcessA(NULL, (LPSTR)"calc.exe", NULL, NULL, FALSE, EXTENDED_STARTUPINFO_PRESENT, NULL, NULL, &si.StartupInfo, &pi);
     if (pi.hProcess == NULL) {
         if (debug) { printf("CreateProcessW failed with error %d\n", GetLastError()); }
         return EXIT_FAILURE;
@@ -61,14 +57,3 @@ int main(int argc, char* argv[]) {
 
     return EXIT_SUCCESS;
 }
-
-
-/*
-
-1. Abre el proceso indicado en el PID (en este caso, 6200) con OpenProcess.
-2. Determina el tamaño del búfer necesario para la lista de atributos con InitializeProcThreadAttributeList.
-3. Asigna memoria para la lista de atributos con HeapAlloc y luego inicializa la lista de atributos con InitializeProcThreadAttributeList.
-4. Actualiza la lista de atributos para incluir el atributo PROC_THREAD_ATTRIBUTE_PARENT_PROCESS, que especifica el proceso padre del nuevo proceso, con UpdateProcThreadAttribute.
-5. Crea un nuevo proceso (en este caso, Notepad) con la lista de atributos especificada usando CreateProcessA.
-
-*/
