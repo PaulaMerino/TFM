@@ -1,21 +1,18 @@
 Path Interception by PATH Environment Variable T1574.007
 
+
 CMD
----------------------------------
-
+------------------------------------------------------------------
 mkdir C:\Temp
-
 set OriginalPath=%PATH%
 set path=C:\Temp;%path%
-
 copy C:\Windows\System32\calc.exe C:\Temp\notepad.exe
-
 notepad.exe
 
 
---------- CLEAN UP -----------
+CLEAN UP
 set PATH=%OriginalPath%
 rmdir /s /q C:\Temp
-
+------------------------------------------------------------------
 
 

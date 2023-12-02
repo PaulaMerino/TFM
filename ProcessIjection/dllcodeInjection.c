@@ -29,7 +29,6 @@ int main(int argc, char* argv[]) {
     hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pid); 
 
     if (hProcess == NULL) {
-        printf("print 1");
         return EXIT_FAILURE;
     }
 
@@ -37,7 +36,6 @@ int main(int argc, char* argv[]) {
     buffer = VirtualAllocEx(hProcess, NULL, pathSize, (MEM_RESERVE | MEM_COMMIT), PAGE_EXECUTE_READWRITE);
 
     if (buffer == NULL) {
-        printf("print 2");
         return EXIT_FAILURE;
     }
 
@@ -48,7 +46,6 @@ int main(int argc, char* argv[]) {
     hKernel32 = GetModuleHandleW(L"kernel32");
 
 	if (hKernel32 == NULL) {
-        printf("print 3");
 		return EXIT_FAILURE;
 	}
 
@@ -60,7 +57,6 @@ int main(int argc, char* argv[]) {
 
     
     if (hThread == NULL) {
-        printf("print 4");
         CloseHandle(hProcess);
         return EXIT_FAILURE;
     }

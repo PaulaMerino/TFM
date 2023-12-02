@@ -1,14 +1,15 @@
-Event Triggered Execution: PowerShell Profile
+Event Triggered Execution: PowerShell Profile (T1546.013)
 
+
+POWERSHELL
 --------------------------------------------------------
 New-Item -Path $profile -Type File -Force
 $String = 'cmd.exe /c calc.exe'
 $String | Out-File -FilePath "$env:USERPROFILE\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1"
 
---------------------------------------------------------
+
 CLEAN UP
 Remove-Item -Path "$env:USERPROFILE\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1" -Force
-
 --------------------------------------------------------
 
 IMPORTANTE -> Set-ExecutionPolicy Unrestricted

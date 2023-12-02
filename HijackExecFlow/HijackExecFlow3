@@ -1,12 +1,11 @@
-Path Interception by Unquoted Path   T1574.009
+Path Interception by Unquoted Path   (T1574.009)
 
-
+CMD
 -------------------------------------
 copy C:\Windows\System32\calc.exe C:\Program.exe
 C:\Program Files\CCleaner\CCleaner.exe
 
 
-
-------------- CLEAN UP -----------
+CLEAN UP
 del C:\Program.exe
-
+-------------------------------------

